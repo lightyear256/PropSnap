@@ -62,11 +62,10 @@ export function SearchBox() {
           } else {
             setIsLoggedIn(true);
           }
-        } catch (error) {
+        } catch (error:any) {
           localStorage.removeItem('token');
           localStorage.removeItem('Token');
           setIsLoggedIn(false);
-          //@ts-expect-error
           setError(error)
         }
       } else {

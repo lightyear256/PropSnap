@@ -71,9 +71,8 @@ export default function Chats() {
                 }
             }); 
             setChats(res.data.chats); 
-        } catch (err) {
+        } catch (err:any) {
             console.error(err);
-            //@ts-expect-error
             setError(err.response?.data?.message || err.message || 'Failed to fetch chats');
         } finally {
             setLoading(false);

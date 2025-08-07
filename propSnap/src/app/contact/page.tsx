@@ -9,8 +9,7 @@ export default function ContactPage() {
     phone: '',
     message: ''
   });
- //@ts-expect-error
-  const handleChange = (e) => {
+  const handleChange = (e:any) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value

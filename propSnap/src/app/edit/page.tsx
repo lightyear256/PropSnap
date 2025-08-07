@@ -138,8 +138,7 @@ export default function Edit() {
           address: propertyData.address,
           latitude: propertyData.latitude,
           longitude: propertyData.longitude,
-          //@ts-expect-error
-          images: propertyData.images.map((img) => ({
+          images: propertyData.images.map((img:any) => ({
             id: img.id,
             url: img.url,
             description: img.description || "",
@@ -265,8 +264,7 @@ export default function Edit() {
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: FormErrors = {};
-        //@ts-expect-error
-        error.errors.forEach((err) => {
+        error.issues.forEach((err:any) => {
           const path = err.path.join(".");
           newErrors[path as keyof FormState] = err.message;
         });
@@ -389,8 +387,7 @@ export default function Edit() {
   };
 
  
-//@ts-expect-error
-  const handleSubmissionError = (error) => {
+  const handleSubmissionError = (error:any) => {
     let errorMessage = "Failed to update property. Please try again.";
 
     if (axios.isAxiosError(error)) {

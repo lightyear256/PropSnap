@@ -75,13 +75,10 @@ export default function Register(){
             });
             window.dispatchEvent(new Event('authStateChanged'));
             router.push('/')
-        } catch (error) {
-        //@ts-expect-error
+        } catch (error:any) {
         console.log('Full error:', error.response?.data);
         
-        //@ts-expect-error
         if (error.response?.data?.error) {
-        //@ts-expect-error
         const backendErrors = error.response.data.error;
         
         const transformedErrors: FormErrors = {

@@ -200,8 +200,7 @@ export default function Add_Property() {
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: FormErrors = {};
-        //@ts-expect-error
-        error.errors.forEach((err) => {
+        error.issues.forEach((err:any) => {
           const path = err.path.join('.');
           newErrors[path as keyof FormState] = err.message;
         });
@@ -318,8 +317,7 @@ const cleanupAndReset = async () => {
   });
   setUploadProgress(0);
 };
-//@ts-expect-error
-const handleSubmissionError = (error) => {
+const handleSubmissionError = (error:unknown) => {
   let errorMessage = 'Failed to add property. Please try again.';
   
   if (axios.isAxiosError(error)) {
