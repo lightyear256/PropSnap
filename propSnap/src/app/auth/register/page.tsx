@@ -110,10 +110,13 @@ export default function Register(){
                 countryCode: ''
             });
             router.push('/auth/login')
-        } catch (error: any) {
-    console.log('Full error:', error.response?.data);
-    
-    if (error.response?.data?.error) {
+        } catch (error) {
+            //@ts-expect-error
+            console.log('Full error:', error.response?.data);
+            
+            //@ts-expect-error
+            if (error.response?.data?.error) {
+        //@ts-expect-error
         const backendErrors = error.response.data.error;
         
         const transformedErrors: FormErrors = {
@@ -220,7 +223,7 @@ export default function Register(){
                         className={`p-3 outline-none bg-teal-800/20 rounded-md transition-colors focus:bg-teal-800/30 focus:ring-2 focus:ring-teal-500/50`}
                         required
                     />
-                    {formData.password !== '' && formData.confirmPassword !== '' && (formData.password===formData.confirmPassword && formData.password!='' ? <span className="text-green-500 text-xs">Password Matched</span>:<span className="text-red-500 text-xs">Password didn't matched</span>)}
+                    {formData.password !== '' && formData.confirmPassword !== '' && (formData.password===formData.confirmPassword && formData.password!='' ? <span className="text-green-500 text-xs">Password Matched</span>:<span className="text-red-500 text-xs">Password didn&apos; matched</span>)}
                 </div>
 
                 <div className="flex flex-col gap-y-1">

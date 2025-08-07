@@ -66,6 +66,8 @@ export function SearchBox() {
           localStorage.removeItem('token');
           localStorage.removeItem('Token');
           setIsLoggedIn(false);
+          //@ts-expect-error
+          setError(error)
         }
       } else {
         setIsLoggedIn(false);

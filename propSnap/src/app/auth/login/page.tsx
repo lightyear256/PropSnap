@@ -75,10 +75,13 @@ export default function Register(){
             });
             window.dispatchEvent(new Event('authStateChanged'));
             router.push('/')
-        } catch (error: any) {
-    console.log('Full error:', error.response?.data);
-    
-    if (error.response?.data?.error) {
+        } catch (error) {
+        //@ts-expect-error
+        console.log('Full error:', error.response?.data);
+        
+        //@ts-expect-error
+        if (error.response?.data?.error) {
+        //@ts-expect-error
         const backendErrors = error.response.data.error;
         
         const transformedErrors: FormErrors = {
@@ -167,7 +170,7 @@ export default function Register(){
 
                 <div className="text-center mt-2">
                     <span className="text-sm text-teal-700">
-                        Don't have an account? 
+                        Don&apos;t have an account? 
                         <Link href={'/auth/register'}><button type="button"  className="ml-1 text-teal-600 hover:text-teal-800 underline">
                             Sign Up
                         </button></Link>

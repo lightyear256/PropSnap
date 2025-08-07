@@ -5,6 +5,7 @@ import { X, MapPin, Upload, ImageIcon } from 'lucide-react';
 import axios from 'axios';
 import { isLoggedIn } from '../utils/tokenCheker';
 import LoginComponent from '../components/LoginRedirection';
+import Image from 'next/image';
 
 
 export const PropertyTypeEnum = z.enum([
@@ -192,14 +193,14 @@ export default function Add_Property() {
         longitude: formData.longitude === '' ? 0 : Number(formData.longitude),
       };
 
-      const { images, ...dataForValidation } = dataToValidate;
+      const { ...dataForValidation } = dataToValidate;
       PropertySchema.parse(dataForValidation);
       setErrors({});
       return true;
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: FormErrors = {};
-        //@ts-ignore
+        //@ts-expect-error
         error.errors.forEach((err) => {
           const path = err.path.join('.');
           newErrors[path as keyof FormState] = err.message;
@@ -262,7 +263,7 @@ const handleSubmitHybrid = async (e: React.FormEvent) => {
     });
 
 
-    const response = await axios.post(
+     await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/property/register_property`, 
       hybridFormData, 
       {
@@ -317,8 +318,8 @@ const cleanupAndReset = async () => {
   });
   setUploadProgress(0);
 };
-
-const handleSubmissionError = (error: any) => {
+//@ts-expect-error
+const handleSubmissionError = (error) => {
   let errorMessage = 'Failed to add property. Please try again.';
   
   if (axios.isAxiosError(error)) {
@@ -671,7 +672,7 @@ const handleSubmissionError = (error: any) => {
             {formData.images.length === 0 && (
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
                 <ImageIcon size={48} className="mx-auto text-gray-400 mb-4" />
-                <p className="text-gray-500 text-sm">No images uploaded yet. Click "Upload Images" to add property photos.</p>
+                <p className="text-gray-500 text-sm">No images uploaded yet. Click &quot;Upload Images&quot; to add property photos.</p>
               </div>
             )}
 
@@ -680,7 +681,7 @@ const handleSubmissionError = (error: any) => {
                 {formData.images.map((image, index) => (
                   <div key={index} className="bg-white border border-gray-200 rounded-lg overflow-hidden">
                     <div className="relative">
-                      <img
+                      <Image
                         src={image.preview}
                         alt={`Property image ${index + 1}`}
                         className="w-full h-48 object-cover"

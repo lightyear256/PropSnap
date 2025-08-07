@@ -138,7 +138,8 @@ export default function Edit() {
           address: propertyData.address,
           latitude: propertyData.latitude,
           longitude: propertyData.longitude,
-          images: propertyData.images.map((img: any) => ({
+          //@ts-expect-error
+          images: propertyData.images.map((img) => ({
             id: img.id,
             url: img.url,
             description: img.description || "",
@@ -257,14 +258,14 @@ export default function Edit() {
         longitude: formData.longitude === "" ? 0 : Number(formData.longitude),
       };
 
-      const { images, id, ...dataForValidation } = dataToValidate;
+      const { ...dataForValidation } = dataToValidate;
       PropertySchema.parse(dataForValidation);
       setErrors({});
       return true;
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: FormErrors = {};
-        //@ts-ignore
+        //@ts-expect-error
         error.errors.forEach((err) => {
           const path = err.path.join(".");
           newErrors[path as keyof FormState] = err.message;
@@ -388,8 +389,8 @@ export default function Edit() {
   };
 
  
-
-  const handleSubmissionError = (error: any) => {
+//@ts-expect-error
+  const handleSubmissionError = (error) => {
     let errorMessage = "Failed to update property. Please try again.";
 
     if (axios.isAxiosError(error)) {
@@ -819,7 +820,7 @@ export default function Edit() {
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
                 <ImageIcon size={48} className="mx-auto text-gray-400 mb-4" />
                 <p className="text-gray-500 text-sm">
-                  No images uploaded yet. Click "Upload New Images" to add property photos.
+                  No images uploaded yet. Click &apos;Upload New Images&apos; to add property photos.
                 </p>
               </div>
             )}

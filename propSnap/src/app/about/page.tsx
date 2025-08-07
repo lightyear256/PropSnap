@@ -54,7 +54,7 @@ export default function AboutPage() {
               <h3 className="text-xl font-semibold text-teal-800 mb-4">Integrity</h3>
               <p className="text-gray-600 leading-relaxed">
                 We conduct business with honesty and transparency, always putting 
-                our clients' best interests first in every transaction.
+                our clients best interests first in every transaction.
               </p>
             </div>
             
@@ -107,7 +107,7 @@ export default function AboutPage() {
         <div className="text-center mt-20">
           <h2 className="text-3xl font-bold text-gray-900 mb-6">Ready to Find Your Dream Home?</h2>
           <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-            Let's discuss your real estate needs and help you find the perfect property. 
+            Let&apos;s discuss your real estate needs and help you find the perfect property. 
             Contact our team today for a free consultation.
           </p>
           <button className="bg-teal-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-teal-700 transition-colors duration-300 transform hover:scale-105">

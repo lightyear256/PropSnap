@@ -37,7 +37,7 @@ const LoginComponent = () => {
           </button>
 
           <div className="text-center text-gray-500 text-sm">
-            Don't have an account? 
+            Don&apos;t have an account? 
             <button onClick={handleSignup} className="text-teal-600 hover:text-teal-700 font-medium ml-1">
               Sign up here
             </button>
