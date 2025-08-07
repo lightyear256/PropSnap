@@ -261,13 +261,13 @@ const handleSubmitHybrid = async (e: React.FormEvent) => {
       }
     });
 
-
+    const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
      await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/property/register_property`, 
       hybridFormData, 
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`
+          Authorization: `Bearer ${token}`
         },
         onUploadProgress: (progressEvent) => {
           if (progressEvent.total) {
