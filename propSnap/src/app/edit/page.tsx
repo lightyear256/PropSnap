@@ -903,6 +903,16 @@ function LoadingFallback() {
 }
 
 export default function Edit() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return <LoadingFallback />;
+  }
+
   return (
     <>
       {isLoggedIn(localStorage.getItem("token")) ? (
@@ -913,5 +923,4 @@ export default function Edit() {
         <LoginComponent />
       )}
     </>
-  );
-}
+  );}
