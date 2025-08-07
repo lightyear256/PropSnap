@@ -245,7 +245,6 @@ function registerProperty(req, res) {
             }
             const imageData = [];
             const files = req.files;
-            console.log(process.env.BACKEND_URL);
             if (files && files.length > 0) {
                 files.forEach((file, index) => {
                     const imageUrl = `${process.env.BACKEND_URL}/${file.filename}`;
@@ -558,7 +557,6 @@ function updateProperty(req, res) {
             if (req.body.propertyData) {
                 try {
                     propertyData = JSON.parse(req.body.propertyData);
-                    console.log("Parsed property data from JSON:", propertyData);
                 }
                 catch (parseError) {
                     console.error("Error parsing propertyData JSON:", parseError);
@@ -569,7 +567,6 @@ function updateProperty(req, res) {
                 if (req.body.existingImages) {
                     try {
                         existingImages = JSON.parse(req.body.existingImages);
-                        console.log("Existing images:", existingImages);
                     }
                     catch (parseError) {
                         console.error("Error parsing existingImages JSON:", parseError);
@@ -681,6 +678,12 @@ function updateProperty(req, res) {
                 });
             }
             const result = yield db_1.Client.$transaction((prisma) => __awaiter(this, void 0, void 0, function* () {
+                // UPDATE PROPERTY FIELDS - This was missing!
+                yield prisma.property.update({
+                    where: { id: id },
+                    data: Object.assign(Object.assign({}, updateData), { cityId: cityRecord.id }),
+                });
+                // Handle images
                 if (existingImages.length > 0 || newImageData.length > 0) {
                     const currentImages = yield prisma.propertyImage.findMany({
                         where: { propertyId: id },
@@ -992,7 +995,6 @@ function getAllCities(req, res) {
             const propertyType = typeof req.query.propertyType === "string" ? req.query.propertyType : "";
             const bhk = typeof req.query.bhk === "string" ? req.query.bhk : "";
             const listingType = typeof req.query.listingType === "string" ? req.query.listingType : "";
-            console.log("Query parameters:", { propertyType, bhk, listingType });
             const propertyFilters = {
                 available: true,
             };
@@ -1013,7 +1015,6 @@ function getAllCities(req, res) {
             if (listingType && listingType !== "") {
                 propertyFilters.ListingType = listingType.toUpperCase();
             }
-            console.log("Property filters:", propertyFilters);
             const matchingProperties = yield db_1.Client.property.findMany({
                 where: propertyFilters,
                 select: {
@@ -1031,8 +1032,6 @@ function getAllCities(req, res) {
                     },
                 },
             });
-            console.log("Matching properties:", matchingProperties.length);
-            console.log("Sample properties:", matchingProperties.slice(0, 3));
             const whereClause = Object.keys(propertyFilters).length === 1 && propertyFilters.available
                 ? {
                     isActive: true,
@@ -1048,7 +1047,6 @@ function getAllCities(req, res) {
                         some: propertyFilters,
                     },
                 };
-            console.log("Where clause for cities:", JSON.stringify(whereClause, null, 2));
             const cities = yield db_1.Client.city.findMany({
                 where: whereClause,
                 select: {
@@ -1067,7 +1065,6 @@ function getAllCities(req, res) {
                     name: "asc",
                 },
             });
-            console.log("Found cities:", cities.length);
             const transformedCities = cities.map((city) => ({
                 id: city.id,
                 name: city.name,
@@ -1118,7 +1115,6 @@ function getAllFavourites(req, res) {
                 },
             });
             const favprop = favourites.map((fav) => fav.property);
-            console.log(favprop);
             return res.status(200).send({
                 success: true,
                 data: favprop,

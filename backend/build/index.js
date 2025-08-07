@@ -16,7 +16,6 @@ exports.app.use((0, cors_1.default)({
     origin: "*",
     credentials: true
 }));
-console.log(process.env.BACKEND_URL);
 exports.app.use('/uploads', express_1.default.static(path_1.default.join(__dirname, '..', 'uploads')));
 exports.app.use('/user', userRouter_1.userRouter);
 exports.app.use('/property', propertiesRouter_1.propertyRouter);

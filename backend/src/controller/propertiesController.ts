@@ -570,8 +570,6 @@ export async function deleteProperty(req: AuthenticatorRequest, res: Response) {
 }
 export async function updateProperty(req: AuthenticatorRequest, res: Response) {
   try {
-    
-
     let propertyData: any;
     let existingImages: any[] = [];
 
@@ -709,7 +707,13 @@ export async function updateProperty(req: AuthenticatorRequest, res: Response) {
     }
 
     const result = await Client.$transaction(async (prisma) => {
-
+      await prisma.property.update({
+        where: { id: id },
+        data: {
+          ...updateData,
+          cityId: cityRecord.id,
+        },
+      });
 
       if (existingImages.length > 0 || newImageData.length > 0) {
         const currentImages = await prisma.propertyImage.findMany({
