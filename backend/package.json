@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "npm run build && npm run dist",
-    "build": "npx tsc",
-    "dist": "nodemon ./build/server.js"
+    "build": "npm i && npx tsc",
+    "dist": "node ./build/server.js"
   },
   "keywords": [],
   "author": "",
