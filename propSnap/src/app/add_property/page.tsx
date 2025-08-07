@@ -8,7 +8,7 @@ import LoginComponent from '../components/LoginRedirection';
 import Image from 'next/image';
 
 
-export const PropertyTypeEnum = z.enum([
+const PropertyTypeEnum = z.enum([
   "APARTMENT",
   "HOUSE", 
   "PG",
