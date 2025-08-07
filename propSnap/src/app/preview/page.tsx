@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react';
 import { MapPin, Square, ChevronDown, ChevronUp, IndianRupee, Home} from 'lucide-react';
 import { Button } from '../components/Buttons';
 import axios from 'axios';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useLoader } from '../hooks/useLoader';
 import { isLoggedIn} from '../utils/tokenCheker';
 import LoginComponent from '../components/LoginRedirection';
 
@@ -84,28 +82,13 @@ interface ApiResponse {
   message?: string;
 }
 
-interface MessageResponse {
-  success: boolean;
-  data: EnquirySchema;
-  message?: string;
-}
 
-interface ReplyResponse {
-  success: boolean;
-  data: EnquiryReplySchema;
-  message?: string;
-}
 
-export default function Preview() {
-  const router=useRouter();
+export default function Preview({ searchParams }: { searchParams: { [key: string]: string } }) {
   const [properties, setProperties] = useState<Property | null>(null);
-  const {loading,setLoading}=useLoader();
   const [loading1, setLoading1] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [submittingComment, setSubmittingComment] = useState<boolean>(false);
-  const [submittingReply, setSubmittingReply] = useState<{[key: string]: boolean}>({});
-  const searchParams = useSearchParams();
-  const propertyId = searchParams.get('propertyId');
+  const propertyId = searchParams.propertyId;
 
   const fetchProperties = async () => {
     try {

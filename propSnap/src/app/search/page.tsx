@@ -3,7 +3,7 @@ import {  useEffect, useState } from "react";
 import axios from "axios";
 import { PropertyCard } from "../components/PropertyCard";
 import { Button } from "../components/Buttons";
-import { useRouter, useSearchParams } from "next/navigation";
+
 import { isLoggedIn } from "../utils/tokenCheker";
 import LoginComponent from "../components/LoginRedirection";
 
@@ -47,13 +47,12 @@ interface ApiResponse {
   message?: string;
 }
 
-export default function Properties() {
-  const searchParams = useSearchParams();
+export default function Properties({ searchParams }: { searchParams: { [key: string]: string } }) {
   const [favouriteStates, setFavouriteStates] = useState<Record<string, boolean>>({});
-  const city = searchParams.get("city"); 
-  const propertyType = searchParams.get("propertyType"); 
-  const bhk = searchParams.get("bhk");
-  const ListingType = searchParams.get("listType");
+  const city = searchParams.city; 
+  const propertyType = searchParams.propertyType; 
+  const bhk = searchParams.bhk;
+  const ListingType = searchParams.listType;
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);

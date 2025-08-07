@@ -3,7 +3,7 @@ import {useEffect, useState } from "react";
 import axios from "axios";
 import { PropertyCard } from "../components/PropertyCard";
 import { Button } from "../components/Buttons";
-import { useRouter, useSearchParams } from "next/navigation";
+
 import { isLoggedIn } from "../utils/tokenCheker";
 import LoginComponent from "../components/LoginRedirection";
 
@@ -49,7 +49,6 @@ interface ApiResponse {
 }
 
 export default function MyProperties() {
-  const searchParams = useSearchParams();
 
   
   const [properties, setProperties] = useState<Property[]>([]);

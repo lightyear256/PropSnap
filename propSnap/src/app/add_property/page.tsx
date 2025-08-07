@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { z } from 'zod';
 import { X, MapPin, Upload, ImageIcon } from 'lucide-react';
 import axios from 'axios';
@@ -71,6 +71,7 @@ type FormErrors = Partial<Record<keyof FormState, string>> & {
 };
 
 export default function Add_Property() {
+  const [mounted, setMounted] = useState(false);
   const [formData, setFormData] = useState<FormState>({
     title: '',
     description: '',
@@ -93,6 +94,10 @@ export default function Add_Property() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleInputChange = <K extends keyof FormState>(
     field: K,
@@ -210,168 +215,169 @@ export default function Add_Property() {
     }
   };
 
+  const token = mounted ? (typeof window !== 'undefined' ? localStorage.getItem("token") : null) : null;
 
-
-
-
-
-  const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
-const handleSubmitHybrid = async (e: React.FormEvent) => {
-  e.preventDefault();
-  
-  if (!validateForm()) {
-    return;
-  }
-
-  setIsLoading(true);
-  setUploadProgress(0);
-
-  try {
-    const price = typeof formData.price === 'string' ? parseFloat(formData.price) : formData.price;
-    const bhk = typeof formData.bhk === 'string' ? parseInt(formData.bhk) : formData.bhk;
-    const sqft = typeof formData.sqft === 'string' ? parseFloat(formData.sqft) : formData.sqft;
-    const latitude = typeof formData.latitude === 'string' ? parseFloat(formData.latitude) : formData.latitude;
-    const longitude = typeof formData.longitude === 'string' ? parseFloat(formData.longitude) : formData.longitude;
-
-    const propertyData = {
-      title: formData.title,
-      description: formData.description,
-      price,
-      type: formData.type,
-      ListingType: formData.ListingType,
-      bhk,
-      sqft,
-      furnished: formData.furnished,
-      available: formData.available,
-      city: formData.city,
-      state: formData.state,
-      country: formData.country,
-      address: formData.address,
-      latitude,
-      longitude,
-    };
-
-    const hybridFormData = new FormData();
+  const handleSubmitHybrid = async (e: React.FormEvent) => {
+    e.preventDefault();
     
-    hybridFormData.append('propertyData', JSON.stringify(propertyData));
-    
-    formData.images.forEach((imageFile, index) => {
-      hybridFormData.append('images', imageFile.file);
-      if (imageFile.description) {
-        hybridFormData.append(`imageDescriptions[${index}]`, imageFile.description);
-      }
-    });
+    if (!validateForm()) {
+      return;
+    }
 
-     await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/property/register_property`, 
-      hybridFormData, 
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-        onUploadProgress: (progressEvent) => {
-          if (progressEvent.total) {
-            const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            setUploadProgress(progress);
-          }
-        },
-      }
-    );
-
-    
-    await cleanupAndReset();
-
-  } catch (error) {
-    console.error('Error in hybrid property submission:', error);
-    handleSubmissionError(error);
-  } finally {
-    setIsLoading(false);
+    setIsLoading(true);
     setUploadProgress(0);
-  }
-};
 
-const cleanupAndReset = async () => {
-  formData.images.forEach(img => {
-    if (img.preview) {
-      URL.revokeObjectURL(img.preview);
-    }
-  });
-  
-  setFormData({
-    title: '',
-    description: '',
-    price: '',
-    type: 'APARTMENT' as const,
-    ListingType: 'RENT' as const,
-    bhk: '',
-    sqft: '',
-    furnished: false,
-    available: true,
-    city: '',
-    state: '',
-    country: '',
-    address: '',
-    latitude: '',
-    longitude: '',
-    images: [],
-  });
-  setUploadProgress(0);
-};
-const handleSubmissionError = (error:unknown) => {
-  let errorMessage = 'Failed to add property. Please try again.';
-  
-  if (axios.isAxiosError(error)) {
-    console.log('Axios error details:', {
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-      data: error.response?.data,
-      message: error.message,
-    });
-    
-    if (error.response?.data?.message) {
-      errorMessage = error.response.data.message;
-    } else if (error.response?.data?.error) {
-      errorMessage = error.response.data.error;
-    }
-    
-    switch (error.response?.status) {
-      case 400:
-        errorMessage = 'Invalid data provided. Please check your inputs.';
-        break;
-      case 401:
-        errorMessage = 'You are not authorized. Please login again.';
-        break;
-      case 413:
-        errorMessage = 'Files are too large. Please reduce image sizes.';
-        break;
-      case 500:
-        errorMessage = 'Server error. Please try again later.';
-        break;
-    }
-  }
-  
-  alert(errorMessage);
-};
+    try {
+      const price = typeof formData.price === 'string' ? parseFloat(formData.price) : formData.price;
+      const bhk = typeof formData.bhk === 'string' ? parseInt(formData.bhk) : formData.bhk;
+      const sqft = typeof formData.sqft === 'string' ? parseFloat(formData.sqft) : formData.sqft;
+      const latitude = typeof formData.latitude === 'string' ? parseFloat(formData.latitude) : formData.latitude;
+      const longitude = typeof formData.longitude === 'string' ? parseFloat(formData.longitude) : formData.longitude;
 
-  const getCurrentLocation = () => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setFormData((prev: FormState) => ({
-            ...prev,
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          }));
-        },
-        (error) => {
-          console.error('Error getting location:', error);
-          alert('Could not get your location. Please enter coordinates manually.');
+      const propertyData = {
+        title: formData.title,
+        description: formData.description,
+        price,
+        type: formData.type,
+        ListingType: formData.ListingType,
+        bhk,
+        sqft,
+        furnished: formData.furnished,
+        available: formData.available,
+        city: formData.city,
+        state: formData.state,
+        country: formData.country,
+        address: formData.address,
+        latitude,
+        longitude,
+      };
+
+      const hybridFormData = new FormData();
+      
+      hybridFormData.append('propertyData', JSON.stringify(propertyData));
+      
+      formData.images.forEach((imageFile, index) => {
+        hybridFormData.append('images', imageFile.file);
+        if (imageFile.description) {
+          hybridFormData.append(`imageDescriptions[${index}]`, imageFile.description);
+        }
+      });
+
+       await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/property/register_property`, 
+        hybridFormData, 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          onUploadProgress: (progressEvent) => {
+            if (progressEvent.total) {
+              const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+              setUploadProgress(progress);
+            }
+          },
         }
       );
-    } else {
-      alert("Geolocation is not supported by this browser.");
+
+      
+      await cleanupAndReset();
+
+    } catch (error) {
+      console.error('Error in hybrid property submission:', error);
+      handleSubmissionError(error);
+    } finally {
+      setIsLoading(false);
+      setUploadProgress(0);
     }
   };
+
+  const cleanupAndReset = async () => {
+    formData.images.forEach(img => {
+      if (img.preview) {
+        URL.revokeObjectURL(img.preview);
+      }
+    });
+    
+    setFormData({
+      title: '',
+      description: '',
+      price: '',
+      type: 'APARTMENT' as const,
+      ListingType: 'RENT' as const,
+      bhk: '',
+      sqft: '',
+      furnished: false,
+      available: true,
+      city: '',
+      state: '',
+      country: '',
+      address: '',
+      latitude: '',
+      longitude: '',
+      images: [],
+    });
+    setUploadProgress(0);
+  };
+  const handleSubmissionError = (error:unknown) => {
+    let errorMessage = 'Failed to add property. Please try again.';
+    
+    if (axios.isAxiosError(error)) {
+      console.log('Axios error details:', {
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        message: error.message,
+      });
+      
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      }
+      
+      switch (error.response?.status) {
+        case 400:
+          errorMessage = 'Invalid data provided. Please check your inputs.';
+          break;
+        case 401:
+          errorMessage = 'You are not authorized. Please login again.';
+          break;
+        case 413:
+          errorMessage = 'Files are too large. Please reduce image sizes.';
+          break;
+        case 500:
+          errorMessage = 'Server error. Please try again later.';
+          break;
+      }
+    }
+    
+    alert(errorMessage);
+  };
+
+    const getCurrentLocation = () => {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            setFormData((prev: FormState) => ({
+              ...prev,
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude
+            }));
+          },
+          (error) => {
+            console.error('Error getting location:', error);
+            alert('Could not get your location. Please enter coordinates manually.');
+          }
+        );
+      } else {
+        alert("Geolocation is not supported by this browser.");
+      }
+    };
+
+  if (!mounted) {
+    return null;
+  }
+
   return (
     <>
     {isLoggedIn(token)?<div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
@@ -683,6 +689,8 @@ const handleSubmissionError = (error:unknown) => {
                         src={image.preview}
                         alt={`Property image ${index + 1}`}
                         className="w-full h-48 object-cover"
+                        width={300}
+                        height={200}
                       />
                       <button
                         type="button"

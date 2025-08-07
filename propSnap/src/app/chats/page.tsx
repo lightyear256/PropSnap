@@ -1,9 +1,9 @@
 "use client"
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import { MessageCircle, Search, User, Clock, MapPin, Home, MoreVertical } from 'lucide-react';
 import { Button } from '../components/Buttons';
 import axios from 'axios';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter} from 'next/navigation';
 import LoginComponent from '../components/LoginRedirection';
 import { isLoggedIn } from '../utils/tokenCheker';
 
@@ -48,10 +48,10 @@ interface Conversation {
   property: Property;
 }
 
-export default function Chats() {
-    const params = useSearchParams();
+export default function Chats({ searchParams }: { searchParams: { [key: string]: string } }) {
+    // const params = use(searchParams)
     const router=useRouter()
-    const propertyId = params.get('propertyId');
+     const propertyId = searchParams.propertyId;
     const [chats, setChats] = useState<Conversation[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedChat, setSelectedChat] = useState<string | null>(null);

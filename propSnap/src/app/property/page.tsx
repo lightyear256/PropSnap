@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { MapPin, Square, MessageCircle, Send, ChevronDown, ChevronUp, IndianRupee, Home} from 'lucide-react';
 import { Button } from '../components/Buttons';
 import axios from 'axios';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter} from 'next/navigation';
 import { useLoader } from '../hooks/useLoader';
 import LoginComponent from '../components/LoginRedirection';
 import { isLoggedIn } from '../utils/tokenCheker';
@@ -96,7 +96,7 @@ interface ReplyResponse {
   message?: string;
 }
 
-export default function Property() {
+export default function Property({ searchParams }: { searchParams: { [key: string]: string } }) {
   const router=useRouter();
   const [properties, setProperties] = useState<Property | null>(null);
   const {loading,setLoading}=useLoader();
@@ -104,8 +104,7 @@ export default function Property() {
   const [error, setError] = useState<string | null>(null);
   const [submittingComment, setSubmittingComment] = useState<boolean>(false);
   const [submittingReply, setSubmittingReply] = useState<{[key: string]: boolean}>({});
-  const searchParams = useSearchParams();
-  const propertyId = searchParams.get('propertyId');
+  const propertyId = searchParams.propertyId;
 
   const fetchProperties = async () => {
     try {

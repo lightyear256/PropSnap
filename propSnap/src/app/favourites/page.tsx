@@ -3,7 +3,6 @@ import {useEffect, useState } from "react";
 import axios from "axios";
 import { PropertyCard } from "../components/PropertyCard";
 import { Button } from "../components/Buttons";
-import { useSearchParams } from "next/navigation";
 
 import LoginComponent from "../components/LoginRedirection";
 import { isLoggedIn } from "../utils/tokenCheker";

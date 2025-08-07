@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { z } from "zod";
 import { X, MapPin, Upload, ImageIcon } from "lucide-react";
 import axios from "axios";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter} from "next/navigation";
 import LoginComponent from "../components/LoginRedirection";
 import { isLoggedIn } from "../utils/tokenCheker";
 
@@ -69,7 +69,7 @@ type FormErrors = Partial<Record<keyof FormState, string>> & {
   images?: string[];
 };
 
-export default function Edit() {
+export default function Edit({ searchParams }: { searchParams: { [key: string]: string } }) {
   const [formData, setFormData] = useState<FormState>({
     id: "",
     title: "",
@@ -90,8 +90,8 @@ export default function Edit() {
     images: [],
   });
 
-  const params = useSearchParams();
-  const id = params.get("id");
+  
+  const id = searchParams.id;
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);

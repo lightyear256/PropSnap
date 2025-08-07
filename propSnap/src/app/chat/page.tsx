@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState, useRef } from 'react';
 import { Send, User, Home } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
+
 import axios from 'axios';
 import LoginComponent from '../components/LoginRedirection';
 import { isLoggedIn } from '../utils/tokenCheker';
@@ -16,10 +16,9 @@ interface Message {
     senderId: string;
 }
 
-export default function Chat(){
+export default function Chat({ searchParams }: { searchParams: { [key: string]: string } }){
     const [messages, setMessages] = useState<Message[]>([]);
-    const searchParams = useSearchParams();
-    const id = searchParams.get('id');
+    const id = searchParams.id;
     
     const [newMessage, setNewMessage] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true); 
