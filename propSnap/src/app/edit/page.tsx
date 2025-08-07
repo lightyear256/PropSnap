@@ -1,12 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { z } from "zod";
 import { X, MapPin, Upload, ImageIcon } from "lucide-react";
 import axios from "axios";
-import { useRouter} from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import LoginComponent from "../components/LoginRedirection";
 import { isLoggedIn } from "../utils/tokenCheker";
-
 
 const PropertyTypeEnum = z.enum([
   "APARTMENT",
@@ -69,7 +68,7 @@ type FormErrors = Partial<Record<keyof FormState, string>> & {
   images?: string[];
 };
 
-export default function Edit({ searchParams }: { searchParams: { [key: string]: string } }) {
+function EditForm() {
   const [formData, setFormData] = useState<FormState>({
     id: "",
     title: "",
@@ -90,13 +89,13 @@ export default function Edit({ searchParams }: { searchParams: { [key: string]: 
     images: [],
   });
 
-  
-  const id = searchParams.id;
+  const params = useSearchParams();
+  const id = params.get("id");
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  const router=useRouter();
+  const router = useRouter();
 
   useEffect(() => {
     if (id) {
@@ -447,10 +446,9 @@ export default function Edit({ searchParams }: { searchParams: { [key: string]: 
       alert("Geolocation is not supported by this browser.");
     }
   };
+
   return (
-    
-    <>
-    {isLoggedIn(localStorage.getItem("token"))?<div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6 mt-20">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Edit Property</h1>
@@ -882,7 +880,38 @@ export default function Edit({ searchParams }: { searchParams: { [key: string]: 
           </div>
         </form>
       </div>
-    </div>:<LoginComponent/>}
+    </div>
+  );
+}
+
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6 mt-20">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-300 rounded w-1/4 mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
+          <div className="space-y-6">
+            <div className="h-32 bg-gray-200 rounded"></div>
+            <div className="h-32 bg-gray-200 rounded"></div>
+            <div className="h-32 bg-gray-200 rounded"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function Edit() {
+  return (
+    <>
+      {isLoggedIn(localStorage.getItem("token")) ? (
+        <Suspense fallback={<LoadingFallback />}>
+          <EditForm />
+        </Suspense>
+      ) : (
+        <LoginComponent />
+      )}
     </>
   );
 }

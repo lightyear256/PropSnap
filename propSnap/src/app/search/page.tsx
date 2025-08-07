@@ -1,9 +1,9 @@
 "use client";
-import {  useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import axios from "axios";
 import { PropertyCard } from "../components/PropertyCard";
 import { Button } from "../components/Buttons";
-
+import { useRouter, useSearchParams } from "next/navigation";
 import { isLoggedIn } from "../utils/tokenCheker";
 import LoginComponent from "../components/LoginRedirection";
 
@@ -47,26 +47,24 @@ interface ApiResponse {
   message?: string;
 }
 
-export default function Properties({ searchParams }: { searchParams: { [key: string]: string } }) {
+function PropertiesContent() {
+  const searchParams = useSearchParams();
   const [favouriteStates, setFavouriteStates] = useState<Record<string, boolean>>({});
-  const city = searchParams.city; 
-  const propertyType = searchParams.propertyType; 
-  const bhk = searchParams.bhk;
-  const ListingType = searchParams.listType;
+  const city = searchParams.get("city"); 
+  const propertyType = searchParams.get("propertyType"); 
+  const bhk = searchParams.get("bhk");
+  const ListingType = searchParams.get("listType");
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-useEffect(() => {
-  const initialStates: Record<string, boolean> = {};
-  properties.forEach((property) => {
-    initialStates[property.id] = property.favourites.length > 0;
-  });
-  setFavouriteStates(initialStates);
-}, [properties]);
-
-
-
+  useEffect(() => {
+    const initialStates: Record<string, boolean> = {};
+    properties.forEach((property) => {
+      initialStates[property.id] = property.favourites.length > 0;
+    });
+    setFavouriteStates(initialStates);
+  }, [properties]);
 
   const fetchProperties = async () => {
     try {
@@ -121,7 +119,6 @@ useEffect(() => {
     fetchProperties();
   }, []);
  
-
   const handleToggleFavorite = (propertyId: string, favourite: boolean) => {
     try{
     console.log("Toggling favorite for property:", propertyId);
@@ -210,7 +207,7 @@ useEffect(() => {
 
   return (
     <>
-    {isLoggedIn(localStorage.getItem("token"))?<div className="min-h-screen bg-gray-50 mt-25">
+    {isLoggedIn(localStorage.getItem("token")) ? <div className="min-h-screen bg-gray-50 mt-25">
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex justify-between items-center">
@@ -255,7 +252,26 @@ useEffect(() => {
           ))}
         </div>
       </div>
-    </div>:<LoginComponent/>}
+    </div> : <LoginComponent/>}
     </>
+  );
+}
+
+function PropertiesLoading() {
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <p className="text-gray-600 text-lg">Loading properties...</p>
+      </div>
+    </div>
+  );
+}
+
+export default function Properties() {
+  return (
+    <Suspense fallback={<PropertiesLoading />}>
+      <PropertiesContent />
+    </Suspense>
   );
 }

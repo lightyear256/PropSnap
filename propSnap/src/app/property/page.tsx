@@ -1,9 +1,9 @@
 "use client"
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { MapPin, Square, MessageCircle, Send, ChevronDown, ChevronUp, IndianRupee, Home} from 'lucide-react';
 import { Button } from '../components/Buttons';
 import axios from 'axios';
-import { useRouter} from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useLoader } from '../hooks/useLoader';
 import LoginComponent from '../components/LoginRedirection';
 import { isLoggedIn } from '../utils/tokenCheker';
@@ -96,15 +96,16 @@ interface ReplyResponse {
   message?: string;
 }
 
-export default function Property({ searchParams }: { searchParams: { [key: string]: string } }) {
-  const router=useRouter();
+function PropertyContent() {
+  const router = useRouter();
   const [properties, setProperties] = useState<Property | null>(null);
-  const {loading,setLoading}=useLoader();
+  const {loading, setLoading} = useLoader();
   const [loading1, setLoading1] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [submittingComment, setSubmittingComment] = useState<boolean>(false);
   const [submittingReply, setSubmittingReply] = useState<{[key: string]: boolean}>({});
-  const propertyId = searchParams.propertyId;
+  const searchParams = useSearchParams();
+  const propertyId = searchParams.get('propertyId');
 
   const fetchProperties = async () => {
     try {
@@ -161,12 +162,13 @@ export default function Property({ searchParams }: { searchParams: { [key: strin
   useEffect(() => {
     fetchProperties();
   }, [propertyId]);
+  
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [comments, setComments] = useState<EnquirySchema[]>([]);
   const [newComment, setNewComment] = useState('');
   const [replyText, setReplyText] = useState<{[key: string]: string}>({});
   const [showReplyBox, setShowReplyBox] = useState<{[key: string]: boolean}>({});
-  console.log("this teh comment: "+JSON.stringify(comments));
+  
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -366,10 +368,10 @@ export default function Property({ searchParams }: { searchParams: { [key: strin
   }
 
   const isRentProperty = properties.type === 'RENT' || properties.ListingType === 'RENT';
- console.log(isLoggedIn(localStorage.getItem("token")));
+  
   return (
     <>
-    {isLoggedIn(localStorage.getItem("token"))?<div className="max-w-6xl mx-auto p-6 bg-white mt-25">
+    {isLoggedIn(localStorage.getItem("token")) ? <div className="max-w-6xl mx-auto p-6 bg-white mt-25">
       <div className="mb-8">
           {properties.listedById==localStorage.getItem("session-id")&&<div className='text-xl mb-2'>My Property</div>}
         <div className="flex justify-between items-start mb-4">
@@ -476,8 +478,6 @@ export default function Property({ searchParams }: { searchParams: { [key: strin
         </div>
       )}
 
-     
-
       {properties.listedById!=localStorage.getItem("session-id")&&<div className="mb-8 p-6 bg-teal-50 rounded-lg">
         <div className="flex items-center justify-between">
           <div>
@@ -535,7 +535,7 @@ export default function Property({ searchParams }: { searchParams: { [key: strin
             
             const userName = comment.user?.name || 'Anonymous User';
             const userInitials = getUserInitials(userName);
-            console.log(comment);
+            
             return (
               <div key={comment.id} className="border-b pb-6">
                 <div className="flex gap-4">
@@ -630,7 +630,30 @@ export default function Property({ searchParams }: { searchParams: { [key: strin
           </div>
         )}
       </div>
-    </div>:<LoginComponent/>}
+    </div> : <LoginComponent/>}
     </>
+  );
+}
+
+function PropertyLoading() {
+  return (
+    <div className="max-w-6xl mx-auto p-6 bg-white mt-25">
+      <div className="animate-pulse">
+        <div className="h-8 bg-gray-200 rounded w-3/4 mb-4"></div>
+        <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
+        <div className="h-6 bg-gray-200 rounded w-1/4 mb-8"></div>
+        <div className="h-96 bg-gray-200 rounded mb-8"></div>
+        <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+      </div>
+    </div>
+  );
+}
+
+export default function Property() {
+  return (
+    <Suspense fallback={<PropertyLoading />}>
+      <PropertyContent />
+    </Suspense>
   );
 }
