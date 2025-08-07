@@ -215,6 +215,7 @@ export default function Add_Property() {
 
 
 
+  const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
 const handleSubmitHybrid = async (e: React.FormEvent) => {
   e.preventDefault();
   
@@ -261,7 +262,6 @@ const handleSubmitHybrid = async (e: React.FormEvent) => {
       }
     });
 
-    const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
      await axios.post(
       `${process.env.NEXT_PUBLIC_API_URL}/property/register_property`, 
       hybridFormData, 
@@ -374,7 +374,7 @@ const handleSubmissionError = (error:unknown) => {
   };
   return (
     <>
-    {isLoggedIn(localStorage.getItem("token"))?<div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    {isLoggedIn(token)?<div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6 mt-20">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Add New Property</h1>
