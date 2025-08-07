@@ -8,7 +8,7 @@ import LoginComponent from "../components/LoginRedirection";
 import { isLoggedIn } from "../utils/tokenCheker";
 
 
-export const PropertyTypeEnum = z.enum([
+const PropertyTypeEnum = z.enum([
   "APARTMENT",
   "HOUSE",
   "PG",
