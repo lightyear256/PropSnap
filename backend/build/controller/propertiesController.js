@@ -678,12 +678,10 @@ function updateProperty(req, res) {
                 });
             }
             const result = yield db_1.Client.$transaction((prisma) => __awaiter(this, void 0, void 0, function* () {
-                // UPDATE PROPERTY FIELDS - This was missing!
                 yield prisma.property.update({
                     where: { id: id },
                     data: Object.assign(Object.assign({}, updateData), { cityId: cityRecord.id }),
                 });
-                // Handle images
                 if (existingImages.length > 0 || newImageData.length > 0) {
                     const currentImages = yield prisma.propertyImage.findMany({
                         where: { propertyId: id },

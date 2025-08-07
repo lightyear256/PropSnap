@@ -706,7 +706,7 @@ export async function updateProperty(req: AuthenticatorRequest, res: Response) {
       });
     }
 
-    const result = await Client.$transaction(async (prisma) => {
+    const result = await Client.$transaction(async (prisma:any) => {
       await prisma.property.update({
         where: { id: id },
         data: {
@@ -722,19 +722,19 @@ export async function updateProperty(req: AuthenticatorRequest, res: Response) {
 
         const existingImageIds = existingImages.map((img) => img.id).filter(Boolean);
         const imagesToDelete = currentImages.filter(
-          (img) => !existingImageIds.includes(img.id)
+          (img:any) => !existingImageIds.includes(img.id)
         );
 
         if (imagesToDelete.length > 0) {
           await prisma.propertyImage.deleteMany({
             where: {
               id: {
-                in: imagesToDelete.map((img) => img.id),
+                in: imagesToDelete.map((img:any) => img.id),
               },
             },
           });
 
-          imagesToDelete.forEach((img) => {
+          imagesToDelete.forEach((img:any) => {
             const filename = img.url.split('/').pop();
             if (filename) {
               const filePath = path.join('uploads/properties', filename);
@@ -1016,7 +1016,7 @@ export async function getAllenquires(req: Request, res: Response) {
     });
 
     const totalReplies = threadedEnquiries.reduce(
-      (sum, enquiry) => sum + enquiry.replies.length,
+      (sum:any, enquiry:any) => sum + enquiry.replies.length,
       0
     );
 
@@ -1129,7 +1129,7 @@ export async function getAllCities(req: Request, res: Response) {
     });
 
 
-    const transformedCities = cities.map((city) => ({
+    const transformedCities = cities.map((city:any) => ({
       id: city.id,
       name: city.name,
       state: city.state,
@@ -1181,7 +1181,7 @@ export async function getAllFavourites(
         },
       },
     });
-    const favprop = favourites.map((fav) => fav.property);
+    const favprop = favourites.map((fav:any) => fav.property);
 
     return res.status(200).send({
       success: true,
