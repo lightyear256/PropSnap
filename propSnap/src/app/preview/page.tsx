@@ -336,6 +336,16 @@ function LoadingFallback() {
 }
 
 export default function Preview() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return <LoadingFallback />;
+  }
+
   return (
     <>
       {isLoggedIn(localStorage.getItem("token")) ? (
