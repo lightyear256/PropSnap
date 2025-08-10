@@ -249,7 +249,7 @@ export function PropertyCard(props: PropertyCard) {
                                 <Button
                                     onClick={handleDelete}
                                     variant={'danger'}
-                                    className="flex-1 sm:flex-none text-sm px-3 py-2 bg-red-600 hover:bg-red-700 text-white border-red-600"
+                                    className="flex-1 sm:flex-none text-sm px-3 py-2"
                                 >
                                     <Trash2 className="w-4 h-4" />
                                     <span className="hidden sm:inline ml-1">Delete</span>
