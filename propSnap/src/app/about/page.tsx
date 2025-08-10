@@ -3,8 +3,8 @@ import { Users, Target, Award, Home } from 'lucide-react';
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-white">
-      <div className="bg-white mt-25 text-teal-800">
+    <div className="min-h-screen mt-25 bg-white">
+      <div className="bg-white text-teal-800">
         <div className="max-w-6xl mx-auto px-6 py-16">
           <h1 className="text-5xl font-bold mb-6">About Premium Properties</h1>
           <p className="text-xl text-teal-600 max-w-3xl leading-relaxed">

@@ -84,26 +84,10 @@ interface ApiResponse {
   message?: string;
 }
 
-// interface MessageResponse {
-//   success: boolean;
-//   data: EnquirySchema;
-//   message?: string;
-// }
-
-// interface ReplyResponse {
-//   success: boolean;
-//   data: EnquiryReplySchema;
-//   message?: string;
-// }
-
 function PreviewContent() {
-  // const router = useRouter();
   const [properties, setProperties] = useState<Property | null>(null);
-  // const { loading, setLoading } = useLoader();
   const [loading1, setLoading1] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  // const [submittingComment, setSubmittingComment] = useState<boolean>(false);
-  // const [submittingReply, setSubmittingReply] = useState<{[key: string]: boolean}>({});
   const searchParams = useSearchParams();
   const propertyId = searchParams.get('propertyId');
 
@@ -173,14 +157,14 @@ function PreviewContent() {
   
   if (loading1) {
     return (
-      <div className="max-w-6xl mx-auto p-6 bg-white mt-25">
+      <div className="w-full max-w-6xl mx-auto p-4 sm:p-6 bg-white mt-25">
         <div className="animate-pulse">
-          <div className="h-8 bg-gray-200 rounded w-3/4 mb-4"></div>
-          <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
-          <div className="h-6 bg-gray-200 rounded w-1/4 mb-8"></div>
-          <div className="h-96 bg-gray-200 rounded mb-8"></div>
-          <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+          <div className="h-6 sm:h-8 bg-gray-200 rounded w-3/4 mb-3 sm:mb-4"></div>
+          <div className="h-3 sm:h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
+          <div className="h-5 sm:h-6 bg-gray-200 rounded w-1/4 mb-6 sm:mb-8"></div>
+          <div className="h-48 sm:h-64 md:h-96 bg-gray-200 rounded mb-6 sm:mb-8"></div>
+          <div className="h-3 sm:h-4 bg-gray-200 rounded w-full mb-2"></div>
+          <div className="h-3 sm:h-4 bg-gray-200 rounded w-3/4"></div>
         </div>
       </div>
     );
@@ -188,10 +172,10 @@ function PreviewContent() {
 
   if (error) {
     return (
-      <div className="max-w-6xl mx-auto p-6 bg-white mt-25">
-        <div className="text-center py-12">
-          <div className="text-red-500 text-xl mb-4">Error Loading Property</div>
-          <p className="text-gray-600 mb-4">{error}</p>
+      <div className="w-full max-w-6xl mx-auto p-4 sm:p-6 bg-white mt-25">
+        <div className="text-center py-8 sm:py-12">
+          <div className="text-red-500 text-lg sm:text-xl mb-4">Error Loading Property</div>
+          <p className="text-gray-600 mb-4 text-sm sm:text-base px-4">{error}</p>
           <Button onClick={fetchProperties}>Try Again</Button>
         </div>
       </div>
@@ -200,9 +184,9 @@ function PreviewContent() {
 
   if (!properties) {
     return (
-      <div className="max-w-6xl mx-auto p-6 bg-white mt-25">
-        <div className="text-center py-12">
-          <div className="text-gray-500 text-xl">Property not found</div>
+      <div className="w-full max-w-6xl mx-auto p-4 sm:p-6 bg-white mt-25">
+        <div className="text-center py-8 sm:py-12">
+          <div className="text-gray-500 text-lg sm:text-xl">Property not found</div>
         </div>
       </div>
     );
@@ -211,65 +195,73 @@ function PreviewContent() {
   const isRentProperty = properties.type === 'RENT' || properties.ListingType === 'RENT';
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-white mt-25">
-      <div className="mb-8">
-        <div className="flex justify-between items-start mb-4">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">{properties.title}</h1>
-            <div className="flex items-center text-gray-600 mb-2">
-              <MapPin className="w-4 h-4 mr-1" />
-              <span>{properties.city.name}, {properties.city.state}</span>
+    <div className="w-full max-w-6xl mx-auto p-4 sm:p-6 bg-white mt-25 ">
+      <div className="mb-6 sm:mb-8">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 sm:mb-4">
+          <div className="flex-1">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-2 leading-tight">
+              {properties.title}
+            </h1>
+            <div className="flex items-center text-gray-600 mb-3 sm:mb-2">
+              <MapPin className="w-3 h-3 sm:w-4 sm:h-4 mr-1 flex-shrink-0" />
+              <span className="text-sm sm:text-base">{properties.city.name}, {properties.city.state}</span>
             </div>
-            <div className="text-3xl font-bold text-teal-600 flex items-center">
-              <IndianRupee className="w-8 h-8" />
+            <div className="text-2xl sm:text-3xl font-bold text-teal-600 flex items-center">
+              <IndianRupee className="w-6 h-6 sm:w-8 sm:h-8" />
               <span>{properties.price}</span>
-              {isRentProperty && <span className="text-lg ml-1">/Month</span>}
+              {isRentProperty && <span className="text-base sm:text-lg ml-1">/Month</span>}
             </div>
           </div>
-          
         </div>
 
-        <div className="flex gap-6 p-4 bg-gray-50 rounded-lg">
-          <div className="flex items-center gap-2">
-            <Home className="w-5 h-5 text-gray-600" />
-            <span className="font-medium">{properties.bhk} BHK</span>
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-3 sm:gap-6 p-3 sm:p-4 bg-gray-50 rounded-lg">
+          <div className="flex items-center gap-2 min-w-0">
+            <Home className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 flex-shrink-0" />
+            <span className="font-medium text-sm sm:text-base truncate">{properties.bhk} BHK</span>
           </div>
           {properties.sqft && (
-            <div className="flex items-center gap-2">
-              <Square className="w-5 h-5 text-gray-600" />
-              <span className="font-medium">{properties.sqft} sq ft</span>
+            <div className="flex items-center gap-2 min-w-0">
+              <Square className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 flex-shrink-0" />
+              <span className="font-medium text-sm sm:text-base truncate">{properties.sqft} sq ft</span>
             </div>
           )}
-          <div className="flex items-center gap-2">
-            <span className="font-medium">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="font-medium text-sm sm:text-base truncate">
               {properties.furnished ? 'Furnished' : 'Unfurnished'}
             </span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="font-medium capitalize">{properties.type}</span>
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="font-medium capitalize text-sm sm:text-base truncate">{properties.type}</span>
           </div>
         </div>
       </div>
 
       {properties.images && properties.images.length > 0 ? (
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           {properties.images.length === 1 ? (
-            <div className="mb-8">
+            <div className="mb-6 sm:mb-8">
               <img 
                 src={properties.images[0].url}
                 alt={properties.images[0].description || 'Property image'} 
-                className="w-full h-96 object-cover rounded-lg"
+                className="w-full h-48 sm:h-64 md:h-80 lg:h-96 object-cover rounded-lg"
               />
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+            <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-6 sm:mb-8">
               {properties.images.map((image, index) => (
-                <div key={image.id} className={index === 0 ? "col-span-2 row-span-2" : ""}>
+                <div 
+                  key={image.id} 
+                  className={`${index === 0 ? "col-span-2" : ""} ${
+                    properties.images.length > 2 && index === 0 ? "row-span-2" : ""
+                  }`}
+                >
                   <img 
                     src={image.url}
                     alt={image.description || `Property image ${index + 1}`} 
                     className={`w-full object-cover rounded-lg ${
-                      index === 0 ? 'h-96' : 'h-44'
+                      index === 0 && properties.images.length > 2 
+                        ? 'h-48 sm:h-64 md:h-80 lg:h-96' 
+                        : 'h-24 sm:h-32 md:h-44'
                     }`}
                   />
                 </div>
@@ -278,42 +270,46 @@ function PreviewContent() {
           )}
         </div>
       ) : (
-        <div className="mb-8 h-96 bg-gray-200 rounded-lg flex items-center justify-center">
-          <span className="text-gray-500">No images available</span>
+        <div className="mb-6 sm:mb-8 h-48 sm:h-64 md:h-80 lg:h-96 bg-gray-200 rounded-lg flex items-center justify-center">
+          <span className="text-gray-500 text-sm sm:text-base">No images available</span>
         </div>
       )}
 
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Property Description</h2>
+      <div className="mb-6 sm:mb-8">
+        <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">
+          Property Description
+        </h2>
         <div className="text-gray-700 leading-relaxed">
           {properties.description ? (
             <>
               <div className={`${!isDescriptionExpanded ? 'line-clamp-3' : ''}`}>
-                <p className="whitespace-pre-line">{properties.description}</p>
+                <p className="whitespace-pre-line text-sm sm:text-base">{properties.description}</p>
               </div>
               {properties.description.length > 200 && (
                 <button
                   onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
-                  className="flex items-center gap-2 text-teal-600 hover:text-teal-700 font-medium mt-4"
+                  className="flex items-center gap-2 text-teal-600 hover:text-teal-700 font-medium mt-3 sm:mt-4 text-sm sm:text-base"
                 >
                   {isDescriptionExpanded ? 'Show Less' : 'Read More'}
                   {isDescriptionExpanded ? 
-                    <ChevronUp className="w-4 h-4" /> : 
-                    <ChevronDown className="w-4 h-4" />
+                    <ChevronUp className="w-3 h-3 sm:w-4 sm:h-4" /> : 
+                    <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4" />
                   }
                 </button>
               )}
             </>
           ) : (
-            <p className="text-gray-500">No description available for this property.</p>
+            <p className="text-gray-500 text-sm sm:text-base">No description available for this property.</p>
           )}
         </div>
       </div>
 
       {properties.address && (
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Address</h2>
-          <p className="text-gray-700">{properties.address}</p>
+        <div className="mb-6 sm:mb-8">
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">
+            Address
+          </h2>
+          <p className="text-gray-700 text-sm sm:text-base leading-relaxed">{properties.address}</p>
         </div>
       )}
     </div>
@@ -322,14 +318,14 @@ function PreviewContent() {
 
 function LoadingFallback() {
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-white mt-25">
+    <div className="w-full max-w-6xl mx-auto p-4 sm:p-6 bg-white mt-25">
       <div className="animate-pulse">
-        <div className="h-8 bg-gray-200 rounded w-3/4 mb-4"></div>
-        <div className="h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
-        <div className="h-6 bg-gray-200 rounded w-1/4 mb-8"></div>
-        <div className="h-96 bg-gray-200 rounded mb-8"></div>
-        <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+        <div className="h-6 sm:h-8 bg-gray-200 rounded w-3/4 mb-3 sm:mb-4"></div>
+        <div className="h-3 sm:h-4 bg-gray-200 rounded w-1/2 mb-2"></div>
+        <div className="h-5 sm:h-6 bg-gray-200 rounded w-1/4 mb-6 sm:mb-8"></div>
+        <div className="h-48 sm:h-64 md:h-96 bg-gray-200 rounded mb-6 sm:mb-8"></div>
+        <div className="h-3 sm:h-4 bg-gray-200 rounded w-full mb-2"></div>
+        <div className="h-3 sm:h-4 bg-gray-200 rounded w-3/4"></div>
       </div>
     </div>
   );

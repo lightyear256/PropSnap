@@ -3,6 +3,7 @@ import z from "zod";
 import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
+import { error } from "console";
 
 const Client = new PrismaClient();
 const registerSchema = z.object({
@@ -58,6 +59,7 @@ export async function signup(req: Request, res: Response) {
   } catch (e) {
     res.status(500).send({
       msg: "Internal Server Error",
+      error:e
     });
   }
 }
@@ -111,6 +113,7 @@ export async function signin(req: Request, res: Response) {
   } catch (e) {
     res.status(500).send({
       msg: "Internal Server Error",
+      e:e
     });
   }
 }

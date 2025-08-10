@@ -106,7 +106,7 @@ export function Header() {
 
     if (!mounted || loading) {
         return (
-            <div className="absolute top-0 left-0 w-full flex justify-between items-center h-16 sm:h-20 px-4 sm:px-6 lg:px-8 bg-teal-600/10 z-50">
+            <div className="absolute top-0 left-0 w-full flex justify-between items-center h-16 sm:h-20 px-4 sm:px-6 lg:px-8 bg-teal-600/10 z-50 ">
                 <div className="flex-shrink-0">
                     <Link href={'/'}>
                         <Image 

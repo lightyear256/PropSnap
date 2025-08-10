@@ -75,6 +75,7 @@ function signup(req, res) {
         catch (e) {
             res.status(500).send({
                 msg: "Internal Server Error",
+                error: e
             });
         }
     });
@@ -126,6 +127,7 @@ function signin(req, res) {
         catch (e) {
             res.status(500).send({
                 msg: "Internal Server Error",
+                e: e
             });
         }
     });

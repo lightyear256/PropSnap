@@ -162,6 +162,11 @@ export async function getAllMessages(req: AuthenticatorRequest, res: Response) {
     const messages = await Client.message.findMany({
       where: {
         conversationId: id as string,
+      
+      },
+      include:{
+        sender:true,
+        receiver:true
       },
       orderBy: {
         createdAt: "asc",

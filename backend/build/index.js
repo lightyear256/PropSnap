@@ -20,3 +20,6 @@ exports.app.use('/uploads', express_1.default.static(path_1.default.join(__dirna
 exports.app.use('/user', userRouter_1.userRouter);
 exports.app.use('/property', propertiesRouter_1.propertyRouter);
 exports.app.use('/chat', chatRouter_1.chatRouter);
+exports.app.get('/ping', (req, res) => {
+    res.send('pong');
+});
