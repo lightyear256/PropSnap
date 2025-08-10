@@ -163,7 +163,7 @@ const PropertySchema = z.object({
   longitude: z.number(),
 });
 export const EnquirySchema = z.object({
-  message: z.string().min(5, "Message must be at least 5 characters long"),
+  message: z.string(),
   propertyId: z.string().uuid("Invalid property ID"),
 });
 export const EnquiryReplySchema = z.object({

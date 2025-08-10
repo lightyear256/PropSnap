@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { Search } from "lucide-react";
+import { Button } from "./Buttons";
 
 interface City {
   id: string;
@@ -214,24 +215,26 @@ export function SearchBox() {
 
   if (!isLoggedIn) {
     return (
-      <div className="flex flex-col items-center justify-center py-8 sm:py-12 text-center px-4">
+      <div className="flex flex-col items-center justify-center  text-center px-4">
         <h3 className="text-lg sm:text-xl font-semibold text-teal-800 mb-2">Get Started</h3>
         <p className="text-sm sm:text-base text-teal-600 mb-4 sm:mb-6 max-w-md">
           Please log in to search and explore properties in your area.
         </p>
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full max-w-xs sm:max-w-none">
-          <button 
+        <div className="flex flex- justify-center sm:flex-row gap-3 sm:gap-4 w-full max-w-xs sm:max-w-none">
+          <Button
+          variant="secondary" 
             onClick={() => router.push('/auth/login')}
             className="bg-teal-700 text-white px-4 sm:px-6 py-2 rounded-md hover:bg-teal-800 transition-colors text-sm sm:text-base"
           >
             Log In
-          </button>
-          <button 
+          </Button>
+          <Button 
+            variant="primary"
             onClick={() => router.push('/auth/register')}
             className="bg-white text-teal-700 border border-teal-300 px-4 sm:px-6 py-2 rounded-md hover:bg-teal-50 transition-colors text-sm sm:text-base"
           >
             Sign Up
-          </button>
+          </Button>
         </div>
       </div>
     );

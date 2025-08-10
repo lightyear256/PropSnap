@@ -178,6 +178,10 @@ function getAllMessages(req, res) {
                 where: {
                     conversationId: id,
                 },
+                include: {
+                    sender: true,
+                    receiver: true
+                },
                 orderBy: {
                     createdAt: "asc",
                 },

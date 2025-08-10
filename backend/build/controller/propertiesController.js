@@ -162,7 +162,7 @@ const PropertySchema = zod_1.default.object({
     longitude: zod_1.default.number(),
 });
 exports.EnquirySchema = zod_1.default.object({
-    message: zod_1.default.string().min(5, "Message must be at least 5 characters long"),
+    message: zod_1.default.string(),
     propertyId: zod_1.default.string().uuid("Invalid property ID"),
 });
 exports.EnquiryReplySchema = zod_1.default.object({
