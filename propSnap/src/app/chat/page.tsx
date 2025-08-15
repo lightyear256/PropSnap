@@ -248,7 +248,7 @@ function ChatContent() {
     return (
         <>
             {isLoggedIn(localStorage.getItem("token")) ? 
-                <div className="flex flex-col h-screen w-full max-w-4xl mx-auto bg-white border-0 sm:border border-gray-200 sm:rounded-lg sm:shadow-lg sm:mt-4 sm:mb-4 sm:h-[calc(100vh-2rem)] mt-15">
+                <div className="flex flex-col h-screen w-full max-w-4xl mx-auto bg-white border-0 sm:border border-gray-200 sm:rounded-lg sm:shadow-lg mt-24 sm:mb-4 sm:h-[calc(100vh-2rem)]">
                    
                     <div className="flex items-center justify-between p-3 sm:p-4 bg-teal-600 text-white sm:rounded-t-lg">
                         <div className="flex items-center space-x-2 sm:space-x-3">
